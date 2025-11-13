@@ -179,8 +179,8 @@ Antes de comenzar, asegúrate de tener instalado:
 ### 1. Clonar el Repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/anemia-detection.git
-cd anemia-detection
+git clone https://github.com/mgarciag9/AnemIA.git
+cd AnemIA
 ```
 
 ### 2. Crear Entorno Virtual
@@ -188,14 +188,14 @@ cd anemia-detection
 **Windows:**
 
 ```bash
-python -m venv venv
-venv\Scripts\activate
+python -m venv .venv
+.venv\Scripts\activate
 ```
 
 **Linux/macOS:**
 
 ```bash
-python3 -m venv venv
+python3 -m venv .venv
 source venv/bin/activate
 ```
 
@@ -924,8 +924,8 @@ sudo apt update
 sudo apt install python3-pip python3-venv nginx postgresql-client
 
 # Clonar repositorio
-git clone https://github.com/tu-usuario/anemia-detection.git
-cd anemia-detection
+git clone https://github.com/mgarciag9/AnemIA.git
+cd AnemIA
 
 # Crear venv e instalar
 python3 -m venv venv
@@ -962,12 +962,12 @@ After=network.target
 [Service]
 User=ubuntu
 Group=www-data
-WorkingDirectory=/home/ubuntu/anemia-detection
-Environment="PATH=/home/ubuntu/anemia-detection/venv/bin"
-ExecStart=/home/ubuntu/anemia-detection/venv/bin/gunicorn \
-    --workers 3 \
-    --bind 0.0.0.0:8000 \
-    anemia_project.wsgi:application
+WorkingDirectory=/home/ubuntu/AnemIA
+Environment="PATH=/home/ubuntu/AnemIA/venv/bin"
+ExecStart=/home/ubuntu/AnemIA/venv/bin/gunicorn \
+  --workers 3 \
+  --bind 0.0.0.0:8000 \
+  anemia_project.wsgi:application
 
 [Install]
 WantedBy=multi-user.target
@@ -999,7 +999,7 @@ server {
 
     location /static/ {
         # S3 maneja los estáticos, esto es solo fallback
-        alias /home/ubuntu/anemia-detection/staticfiles/;
+        alias /home/ubuntu/AnemIA/staticfiles/;
     }
 }
 ```
@@ -1128,8 +1128,8 @@ docker-compose up --build
 ### 1. Fork el Repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/anemia-detection.git
-cd anemia-detection
+git clone https://github.com/mgarciag9/AnemIA.git
+cd AnemIA
 ```
 
 ### 2. Crear Rama de Feature
@@ -1188,7 +1188,7 @@ def ai(i):
 
 Si encuentras un bug:
 
-1. Verifica que no esté ya reportado en [Issues](https://github.com/tu-usuario/anemia-detection/issues)
+1. Verifica que no esté ya reportado en [Issues](https://github.com/mgarciag9/AnemIA/issues)
 2. Crea un nuevo issue con:
    - Descripción del problema
    - Pasos para reproducir
@@ -1331,8 +1331,8 @@ SOFTWARE.
 ## 📞 Soporte y Contacto
 
 - **Email**: mgarciag9@unemi.edu.ec
-- **Issues**: [GitHub Issues](https://github.com/tu-usuario/anemia-detection/issues)
-- **Documentación**: [Wiki del proyecto](https://github.com/tu-usuario/anemia-detection/wiki)
+- **Issues**: [GitHub Issues](https://github.com/mgarciag9/AnemIA/issues)
+- **Documentación**: [Wiki del proyecto](https://github.com/mgarciag9/AnemIA/wiki)
 
 ---
 
