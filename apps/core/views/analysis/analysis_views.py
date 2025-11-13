@@ -89,23 +89,39 @@ def analyze_image(request):
                 status=400,
             )
 
-        # Guardar imagen en static/img/analysis/{paciente_id}/
+        # Guardar imagen usando default_storage (funciona local y S3)
         import datetime
 
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"analisis_{timestamp}.jpg"
 
-        # Crear directorio del paciente si no existe
-        paciente_dir = os.path.join(
-            settings.BASE_DIR, "static", "img", "analysis", str(paciente_id)
-        )
-        os.makedirs(paciente_dir, exist_ok=True)
+        # Ruta relativa dentro de MEDIA: analysis/<paciente_id>/filename
+        storage_path = f"analysis/{paciente_id}/{filename}"
 
-        # Ruta completa del archivo
-        image_path = os.path.join(paciente_dir, filename)
+        # Guardar imagen en un buffer y usar default_storage
+        buffer = BytesIO()
+        image.save(buffer, format="JPEG", quality=95)
+        buffer.seek(0)
 
-        # Guardar imagen
-        image.save(image_path, "JPEG", quality=95)
+        # Guardar en storage (S3 o filesystem según configuración)
+        default_storage.save(storage_path, ContentFile(buffer.read()))
+
+        # Obtener URL pública (funciona para S3 y para MEDIA en local)
+        try:
+            image_url = default_storage.url(storage_path)
+        except Exception:
+            # Fallback: ruta relativa bajo /media/
+            image_url = f"/media/{storage_path}"
+
+        # Para backward-compatibilidad, establecer image_path local si storage es filesystem
+        # intentaremos obtener un path en disco si existe
+        try:
+            if hasattr(default_storage, 'path'):
+                image_path = default_storage.path(storage_path)
+            else:
+                image_path = storage_path
+        except Exception:
+            image_path = storage_path
 
         # Usar el detector singleton (modelo ya pre-cargado)
         try:
@@ -138,7 +154,7 @@ def analyze_image(request):
         print(f"Paciente: {paciente.nombre} {paciente.apellido}")
         print(f"DNI: {paciente.dni}")
         print(f"Usuario: {request.user.email}")
-        print(f"Imagen guardada: static/img/analysis/{paciente_id}/{filename}")
+        print(f"Imagen guardada en storage: {storage_path} (url: {image_url})")
         print(f"Diagnóstico: {result['diagnosis']}")
         print(
             f"Probabilidad de anemia: {result['probability']:.4f} ({result['probability']*100:.2f}%)"
@@ -167,7 +183,7 @@ def analyze_image(request):
                 "nivel_confianza": result["confidence_level"],
             },
             "imagen_guardada": filename,
-            "imagen_ruta": f"static/img/analysis/{paciente_id}/{filename}",
+            "imagen_ruta": image_url,
             "mensaje": "Análisis completado exitosamente. Redirigiendo a resultados...",
         }
 
@@ -380,25 +396,50 @@ def analysis_results_view(request, paciente_id):
             return redirect("core:analysis")
 
         # Construir rutas
-        image_path = os.path.join(
-            settings.BASE_DIR,
-            "static",
-            "img",
-            "analysis",
-            str(paciente_id),
-            image_filename,
-        )
-        image_url = f"/static/img/analysis/{paciente_id}/{image_filename}"
+        # Usar default_storage para construir la ruta en storage
+        storage_path = f"analysis/{paciente_id}/{image_filename}"
 
-        # Verificar que la imagen existe
-        if not os.path.exists(image_path):
+        # Obtener URL pública
+        try:
+            image_url = default_storage.url(storage_path)
+        except Exception:
+            image_url = f"/media/{storage_path}"
+
+        # Verificar existencia usando default_storage
+        try:
+            exists = default_storage.exists(storage_path)
+        except Exception:
+            # Fallback a comprobación en disco
+            exists = os.path.exists(os.path.join(settings.MEDIA_ROOT, storage_path))
+
+        if not exists:
             return redirect("core:analysis")
 
         # Usar el detector singleton (modelo ya pre-cargado)
         from ml_models.model_loader import get_anemia_detector
 
         detector = get_anemia_detector()
-        result = detector.predict(image_path)
+
+        # Si tenemos un path en disco, pasarlo; en caso contrario, abrir la imagen desde storage
+        try:
+            # Si image_path apunta a ruta local válida (FileSystemStorage.path), usarla
+            if os.path.exists(image_path):
+                result = detector.predict(image_path)
+            else:
+                # Abrir desde storage como archivo y pasar objeto PIL al detector
+                with default_storage.open(storage_path, 'rb') as f:
+                    img = Image.open(f)
+                    result = detector.predict(img)
+        except Exception:
+            # Último intento: pasar la URL (no ideal) o volver a intentar abrir desde MEDIA_ROOT
+            try:
+                local_try = os.path.join(settings.MEDIA_ROOT, storage_path)
+                if os.path.exists(local_try):
+                    result = detector.predict(local_try)
+                else:
+                    raise
+            except Exception as e:
+                raise
 
         # Generar diagnóstico con Gemini
         confidence_percentage = round(result["confidence"] * 100, 2)

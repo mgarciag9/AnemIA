@@ -230,23 +230,35 @@ def _generate_pdf_content(reporte, request_user):
     story.append(Spacer(1, 0.2 * inch))
 
     # Imagen de la conjuntiva (si existe)
-    image_path = os.path.join(
-        settings.BASE_DIR,
-        "static",
-        "img",
-        "analysis",
-        str(reporte.paciente.id),
-        reporte.imagen_conjuntiva,
-    )
+    # Construir ruta en storage (analysis/<paciente_id>/<imagen>) y abrir desde default_storage
+    storage_path = f"analysis/{reporte.paciente.id}/{reporte.imagen_conjuntiva}"
+    try:
+        from django.core.files.storage import default_storage
 
-    if os.path.exists(image_path):
-        try:
-            img = Image(image_path, width=3 * inch, height=3 * inch)
-            story.append(Paragraph("IMAGEN ANALIZADA", subtitle_style))
-            story.append(img)
-            story.append(Spacer(1, 0.2 * inch))
-        except Exception as e:
-            print(f"Error al cargar imagen en PDF: {e}")
+        if default_storage.exists(storage_path):
+            try:
+                with default_storage.open(storage_path, 'rb') as f:
+                    img_bytes = f.read()
+                    bio = BytesIO(img_bytes)
+                    img = Image(bio, width=3 * inch, height=3 * inch)
+                    story.append(Paragraph("IMAGEN ANALIZADA", subtitle_style))
+                    story.append(img)
+                    story.append(Spacer(1, 0.2 * inch))
+            except Exception as e:
+                print(f"Error al cargar imagen en PDF desde storage: {e}")
+        else:
+            # Fallback: intentar ruta local en MEDIA_ROOT
+            local_path = os.path.join(settings.MEDIA_ROOT, 'analysis', str(reporte.paciente.id), reporte.imagen_conjuntiva)
+            if os.path.exists(local_path):
+                try:
+                    img = Image(local_path, width=3 * inch, height=3 * inch)
+                    story.append(Paragraph("IMAGEN ANALIZADA", subtitle_style))
+                    story.append(img)
+                    story.append(Spacer(1, 0.2 * inch))
+                except Exception as e:
+                    print(f"Error al cargar imagen en PDF (local): {e}")
+    except Exception as e:
+        print(f"Error al verificar imagen en storage: {e}")
 
     # Observaciones clínicas
     story.append(Paragraph("OBSERVACIONES CLÍNICAS", subtitle_style))

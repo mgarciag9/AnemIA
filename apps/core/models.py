@@ -107,7 +107,13 @@ class ReporteAnemia(models.Model):
     def get_imagen_url(self):
         """Retorna la URL completa de la imagen conjuntiva"""
         if self.imagen_conjuntiva:
-            return f"/static/img/analysis/{self.paciente.id}/{self.imagen_conjuntiva}"
+            try:
+                from django.core.files.storage import default_storage
+
+                storage_path = f"analysis/{self.paciente.id}/{self.imagen_conjuntiva}"
+                return default_storage.url(storage_path)
+            except Exception:
+                return f"/media/analysis/{self.paciente.id}/{self.imagen_conjuntiva}"
         return None
 
     def __str__(self):
