@@ -1,0 +1,218 @@
+{% extends 'base.html' %} {% load static %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/results.css' %}" />
+<link rel="stylesheet" href="{% static 'css/modals.css' %}" />
+<style>
+  /* Animación de entrada suave para la página de resultados */
+  .results-container {
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .diagnosis-column {
+    animation: slideInLeft 0.8s ease-out 0.2s both;
+  }
+
+  .image-column {
+    animation: slideInRight 0.8s ease-out 0.3s both;
+  }
+
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="results-container">
+  <div class="results-header">
+    <h1 class="page-title">Resultados de el Análisis</h1>
+  </div>
+
+  <div class="results-content">
+    <!-- Contenedor Principal -->
+    <div class="results-grid">
+      <!-- Columna Izquierda: Información del Diagnóstico -->
+      <div class="diagnosis-column">
+        <div class="diagnosis-content">
+          <!-- Encabezado del Reporte -->
+          <h2 class="report-title">
+            Reporte de Detección de Anemia - Análisis Conjuntival
+          </h2>
+          <div class="report-meta">
+            <p><strong>Fecha del análisis:</strong> {{ fecha_analisis }}</p>
+            <p>
+              <strong>Paciente:</strong> {{ paciente.nombre }} {{paciente.apellido }}
+            </p>
+          </div>
+
+          <!-- Resultado de la Detección -->
+          <div
+            class="detection-result {% if resultado.tiene_anemia %}has-anemia{% else %}no-anemia{% endif %}"
+          >
+            <h3 class="result-title">Resultado de la Detección</h3>
+            <div class="result-badge">
+              {% if resultado.tiene_anemia %}
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <span class="result-text">Anemia Detectada</span>
+              {% else %}
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <span class="result-text">No se Detectó Anemia</span>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Observaciones Clínicas -->
+          <h3 class="section-title">Observaciones Clínicas</h3>
+          <p class="section-content">{{ diagnostico.observaciones }}</p>
+
+          <!-- Interpretación Preliminar -->
+          <h3 class="section-title">Interpretación Preliminar</h3>
+          <div class="confidence-badge">
+            <span class="confidence-label">Porcentaje de confianza:</span>
+            <span class="confidence-value">{{ resultado.confianza }}%</span>
+          </div>
+          <p class="section-content">{{ diagnostico.interpretacion }}</p>
+
+          <!-- Recomendaciones -->
+          <h3 class="section-title">Recomendaciones</h3>
+          <p class="section-content">{{ diagnostico.recomendaciones }}</p>
+        </div>
+
+        <!-- Botones de Acción -->
+        <div class="action-buttons">
+          <button class="btn btn-primary" onclick="generarPDFReporte()">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+              ></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            Generar pdf
+          </button>
+          <button class="btn btn-danger" onclick="mostrarModalCancelar()">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            Cancelar
+          </button>
+        </div>
+      </div>
+
+      <!-- Columna Derecha: Imagen -->
+      <div class="image-column">
+        <div class="image-container">
+          <div class="image-label">Imagen detectada 1</div>
+          <img
+            src="{{ imagen_url }}"
+            alt="Imagen de conjuntiva analizada"
+            class="analysis-image"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Incluir modal de confirmación -->
+{% include 'components/confirm_cancel_modal.html' %}
+
+<!-- Datos ocultos para JavaScript -->
+<input type="hidden" id="paciente_id" value="{{ paciente.id }}" />
+<input type="hidden" id="image_filename" value="{{ image_filename }}" />
+<input
+  type="hidden"
+  id="observaciones"
+  value="{{ diagnostico.observaciones }}"
+/>
+<input
+  type="hidden"
+  id="interpretacion"
+  value="{{ diagnostico.interpretacion }}"
+/>
+<input
+  type="hidden"
+  id="recomendaciones"
+  value="{{ diagnostico.recomendaciones }}"
+/>
+<input type="hidden" id="tiene_anemia" value="{{ resultado.tiene_anemia }}" />
+<input type="hidden" id="probabilidad" value="{{ resultado.probabilidad }}" />
+<input type="hidden" id="confianza" value="{{ resultado.confianza }}" />
+<input
+  type="hidden"
+  id="nivel_confianza"
+  value="{{ resultado.nivel_confianza }}"
+/>
+
+<script src="{% static 'js/results.js' %}"></script>
+<script>
+  // Inicializar la página de resultados
+  document.addEventListener("DOMContentLoaded", function () {
+    initializeResults("{{ csrf_token }}");
+  });
+</script>
+{% endblock %}

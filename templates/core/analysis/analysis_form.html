@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/analysis.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/patients.css' %}" />
+  <!-- Select2 CSS para búsqueda en el selector -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+    rel="stylesheet"
+  />
+  <style>
+    /* Personalización de Select2 para el tema */
+    .select2-container--default .select2-selection--single {
+      height: 45px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+
+    .select2-container--default
+      .select2-selection--single
+      .select2-selection__rendered {
+      line-height: 27px;
+      color: #2d3748;
+    }
+
+    .select2-container--default
+      .select2-selection--single
+      .select2-selection__arrow {
+      height: 43px;
+    }
+
+    .select2-container--default.select2-container--focus
+      .select2-selection--single {
+      border-color: #7fa8b5;
+      box-shadow: 0 0 0 3px rgba(127, 168, 181, 0.1);
+    }
+
+    .select2-dropdown {
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+    }
+
+    .select2-container--default
+      .select2-results__option--highlighted[aria-selected] {
+      background-color: #7fa8b5;
+    }
+
+    .select2-container {
+      width: 100% !important;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="analysis-container">
+    {% csrf_token %}
+    <div class="analysis-header">
+      <h1 class="page-title">Análisis de Imágenes</h1>
+    </div>
+
+    <div class="analysis-content">
+      <!-- Selector de Paciente -->
+      <div class="patient-section">
+        <div class="form-group">
+          <label for="pacienteSelect" class="form-label">
+            Selecciona a un paciente
+          </label>
+          <select id="pacienteSelect" class="form-select" style="width: 100%">
+            <option value="">Selecciona a un paciente</option>
+            {% for paciente in pacientes %}
+              <option value="{{ paciente.id }}">
+                {{ paciente.nombre }} {{ paciente.apellido }} - DNI: {{ paciente.dni }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <button type="button" class="btn btn-new-patient" id="btnNuevoPaciente">
+          <i class="icon-plus"></i> Nuevo Paciente
+        </button>
+      </div>
+
+      <!-- Área de Carga de Imagen -->
+      <div class="upload-section">
+        <div class="upload-area" id="uploadArea">
+          <input
+            type="file"
+            id="imageInput"
+            accept="image/jpeg,image/png,image/jpg"
+            style="display: none"
+          />
+
+          <div class="upload-placeholder" id="uploadPlaceholder">
+            <div class="upload-icon">
+              <svg
+                width="64"
+                height="64"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+            </div>
+            <p class="upload-text">
+              Carga una imagen o <span class="upload-link">selecciona un archivo</span>
+            </p>
+            <p class="upload-hint">Arrastra y suelta tu imagen aquí o</p>
+            <p class="upload-formats">Formatos aceptados: JPEG, PNG</p>
+          </div>
+
+          <!-- Vista previa y selección de área -->
+          <div
+            class="selection-container"
+            id="selectionContainer"
+            style="display: none"
+          >
+            <div class="selection-instructions">
+              <p class="instruction-text">
+                <strong>📌 Instrucciones:</strong> Usa el pincel para
+                pintar/marcar el área de la conjuntiva que deseas analizar
+              </p>
+            </div>
+
+            <div class="canvas-wrapper">
+              <canvas id="drawingCanvas"></canvas>
+              <canvas id="maskCanvas"></canvas>
+            </div>
+
+            <div class="selection-tools">
+              <div class="tool-group">
+                <label class="tool-label">Tamaño del pincel:</label>
+                <input
+                  type="range"
+                  id="brushSize"
+                  min="5"
+                  max="50"
+                  value="20"
+                  class="brush-slider"
+                />
+                <span id="brushSizeValue" class="brush-value">20px</span>
+              </div>
+
+              <div class="tool-group">
+                <button type="button" class="btn btn-tool" id="btnClearMask">
+                  <i class="icon-clear"></i> Limpiar selección
+                </button>
+              </div>
+            </div>
+
+            <div class="selection-controls">
+              <button
+                type="button"
+                class="btn btn-danger btn-sm"
+                id="btnCancelSelection"
+              >
+                <i class="icon-cancel"></i> Cancelar
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary btn-sm"
+                id="btnApplySelection"
+              >
+                <i class="icon-check"></i> Continuar
+              </button>
+            </div>
+
+            <p class="selection-help-text">
+              💡 <strong>Tip:</strong> Puedes marcar el área específica de la
+              conjuntiva o continuar sin selección para analizar la imagen
+              completa
+            </p>
+          </div>
+
+          <!-- Imagen recortada final -->
+          <div class="cropped-preview" id="croppedPreview" style="display: none">
+            <img id="croppedImage" src="" alt="Imagen recortada" />
+            <button type="button" class="btn-change-image" id="btnChangeImage">
+              <i class="icon-change"></i> Cambiar imagen
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botón de Análisis -->
+      <div class="analysis-action">
+        <button type="button" class="btn btn-analyze" id="btnAnalyze" disabled>
+          <span class="btn-text">Cargar y analizar</span>
+          <span class="btn-loader" style="display: none">
+            <span class="spinner"></span> Analizando...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modales -->
+  {% include 'components/patient_modal.html' %}
+  {% include 'components/transition_modal.html' %}
+{% endblock %}
+
+{% block extra_js %}
+  <!-- jQuery (requerido para Select2) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Select2 JS para búsqueda en el selector -->
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script src="{% static 'js/patients.js' %}"></script>
+  <script src="{% static 'js/transition_modal.js' %}"></script>
+  <script src="{% static 'js/analysis.js' %}"></script>
+{% endblock %}

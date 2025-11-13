@@ -1,0 +1,207 @@
+{% load static %}
+<!-- Modal Universal para Pacientes -->
+<div id="patientModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 id="modalTitle">Detalles del Paciente</h2>
+      <span class="close" onclick="closeModal()">&times;</span>
+    </div>
+
+    <div class="modal-body">
+      <!-- Vista de detalles (solo lectura) -->
+      <div id="viewMode" style="display: none">
+        <div class="patient-details-grid">
+          <div class="patient-info">
+            <div class="info-row">
+              <span class="info-label">Nombre Completo:</span>
+              <span class="info-value" id="view_nombre_completo"></span>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Dni:</span>
+              <span class="info-value" id="view_dni"></span>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Correo:</span>
+              <span class="info-value" id="view_correo"></span>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Fecha de Registro:</span>
+              <span class="info-value" id="view_fecha_registro"></span>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Sexo:</span>
+              <span class="info-value" id="view_sexo"></span>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Ciudad:</span>
+              <span class="info-value" id="view_ciudad"></span>
+            </div>
+          </div>
+
+          <div class="patient-reports-section">
+            <h3 class="reports-title">Reportes:</h3>
+            <div id="reportes_list" class="reportes-list">
+              <!-- Los reportes se cargarán dinámicamente aquí -->
+            </div>
+          </div>
+
+          <div class="patient-photo-section">
+            <div class="photo-label">Foto de perfil</div>
+            <div class="photo-container">
+              <img
+                id="view_foto"
+                src="{% static 'img/profile_pics/foto_por_defecto.webp' %}"
+                alt="Foto del paciente"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulario de registro/edición -->
+      <div id="formMode" style="display: none">
+        <form id="patientForm" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="hidden" id="patient_id" name="patient_id" />
+
+          <div class="form-grid">
+            <div class="form-fields">
+              <div class="form-row">
+                <div class="form-group">
+                  <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    class="form-control"
+                    placeholder="Nombres"
+                    required
+                  />
+                  <span class="error-message" id="error_nombre"></span>
+                </div>
+
+                <div class="form-group">
+                  <input
+                    type="text"
+                    id="apellido"
+                    name="apellido"
+                    class="form-control"
+                    placeholder="Apellidos"
+                    required
+                  />
+                  <span class="error-message" id="error_apellido"></span>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <select id="sexo" name="sexo" class="form-control" required>
+                    <option value="">Sexo</option>
+                    <option value="M">Masculino</option>
+                    <option value="F">Femenino</option>
+                  </select>
+                  <span class="error-message" id="error_sexo"></span>
+                </div>
+
+                <div class="form-group">
+                  <input
+                    type="text"
+                    id="ciudad"
+                    name="ciudad"
+                    class="form-control"
+                    placeholder="Ciudad"
+                  />
+                  <span class="error-message" id="error_ciudad"></span>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <input
+                    type="email"
+                    id="correo"
+                    name="correo"
+                    class="form-control"
+                    placeholder="Ingresa tu correo electrónico"
+                    required
+                  />
+                  <span class="error-message" id="error_correo"></span>
+                </div>
+
+                <div class="form-group">
+                  <input
+                    type="text"
+                    id="dni"
+                    name="dni"
+                    class="form-control"
+                    placeholder="Dni"
+                    required
+                  />
+                  <span class="error-message" id="error_dni"></span>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group full-width">
+                  <input
+                    type="text"
+                    id="direccion"
+                    name="direccion"
+                    class="form-control"
+                    placeholder="Dirección"
+                  />
+                  <span class="error-message" id="error_direccion"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-photo-section">
+              <div class="photo-label">Foto de perfil</div>
+              <div class="photo-upload-container">
+                <div
+                  class="photo-preview"
+                  onclick="document.getElementById('foto_perfil').click()"
+                >
+                  <img
+                    id="preview_foto"
+                    src="{% static 'img/profile_pics/foto_por_defecto.webp' %}"
+                    alt="Vista previa"
+                  />
+                  <div class="photo-overlay">
+                    <span class="overlay-text">Arrastra y suelta la foto</span>
+                  </div>
+                </div>
+                <input
+                  type="file"
+                  id="foto_perfil"
+                  name="foto_perfil"
+                  accept="image/*"
+                  style="display: none"
+                  onchange="previewImage(this)"
+                />
+              </div>
+
+              <!-- Botones dentro de la sección de foto -->
+              <div class="form-actions">
+                <button type="submit" class="btn-registrar" id="btnSubmit">
+                  Registrar
+                </button>
+                <button
+                  type="button"
+                  class="btn-cancelar"
+                  onclick="closeModal()"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

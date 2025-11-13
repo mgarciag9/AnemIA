@@ -1,0 +1,281 @@
+/* ============================================
+   ESTILOS GLOBALES PARA MODALES
+   Archivo común para todos los modales del sistema
+   ============================================ */
+
+/* Overlay del modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Contenido del modal - Tamaño estándar */
+.modal-content {
+  background-color: #e8f3f7;
+  margin: 2% auto;
+  padding: 0;
+  border-radius: 10px;
+  width: 85%;
+  max-width: 900px;
+  min-width: 320px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideDown 0.3s;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Modal pequeño (formularios simples, confirmaciones) */
+.modal-content.modal-sm {
+  max-width: 500px;
+  width: 80%;
+}
+
+/* Modal mediano (formularios con varios campos) */
+.modal-content.modal-md {
+  max-width: 700px;
+  width: 85%;
+}
+
+/* Modal grande (formularios complejos, detalles) */
+.modal-content.modal-lg {
+  max-width: 900px;
+  width: 90%;
+}
+
+/* Modal extra grande (tablas, reportes) */
+.modal-content.modal-xl {
+  max-width: 1200px;
+  width: 95%;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Header del modal */
+.modal-header {
+  background-color: #7fa8b5;
+  color: white;
+  padding: 1.2rem 2rem;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2,
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: white;
+}
+
+/* Botón cerrar */
+.close {
+  color: white;
+  font-size: 1.8rem;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 1;
+  transition: transform 0.2s;
+  background: none;
+  border: none;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close:hover {
+  transform: scale(1.2);
+}
+
+/* Body del modal */
+.modal-body {
+  padding: 2rem;
+  overflow: visible;
+  background-color: #e8f3f7;
+}
+
+/* Ocultar scrollbar del modal-body */
+.modal-body::-webkit-scrollbar {
+  display: none;
+}
+
+.modal-body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Footer del modal (si se usa) */
+.modal-footer {
+  padding: 1.5rem 2rem;
+  background-color: #e8f3f7;
+  border-radius: 0 0 10px 10px;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  border-top: 1px solid rgba(127, 168, 181, 0.2);
+}
+
+/* Botones estándar en modales */
+.btn-primary {
+  padding: 0.7rem 2rem;
+  background-color: #7fa8b5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: #6b9eb2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  padding: 0.7rem 2rem;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-danger {
+  padding: 0.7rem 2rem;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-success {
+  padding: 0.7rem 2rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    margin: 5% auto;
+    max-height: 85vh;
+  }
+
+  .modal-content.modal-sm,
+  .modal-content.modal-md,
+  .modal-content.modal-lg,
+  .modal-content.modal-xl {
+    width: 95%;
+    max-width: none;
+  }
+
+  .modal-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .modal-header h2,
+  .modal-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .modal-body {
+    padding: 1.5rem;
+  }
+
+  .modal-footer {
+    padding: 1rem 1.5rem;
+    flex-direction: column;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-danger,
+  .btn-success {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    width: 98%;
+    margin: 2% auto;
+  }
+
+  .modal-header {
+    padding: 0.8rem 1rem;
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+}

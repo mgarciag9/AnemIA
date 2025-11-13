@@ -1,0 +1,101 @@
+# .gitignore generado automáticamente para el proyecto AnemIA
+# Evita subir credenciales, entornos, caches y archivos pesados (modelos, datos de usuarios)
+
+# --- Python ---
+*.py[cod]
+*.pyo
+*.pyd
+__pycache__/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+env.bak/
+
+# --- IDEs / editors ---
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+
+# --- Django / local dev ---
+# Base de datos local
+db.sqlite3
+
+# Archivos de configuración local / claves
+.env
+.env.*
+*.env
+local_settings.py
+secret_key.txt
+
+# Carpetas de media/uploads generadas por Django (si las usas)
+media/
+uploads/
+
+# Static files de build (si se generan en build step)
+staticfiles/
+
+# Logs y coverage
+*.log
+.coverage
+coverage.xml
+htmlcov/
+pytest_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# --- AWS / credenciales / S3 ---
+# Archivos con posibles claves/credenciales
+anemia-s3-user_accessKeys.csv
+*accessKeys.csv
+*credentials*
+aws_credentials
+credentials.json
+*.pem
+*.key
+*.crt
+
+# No ignoramos políticas públicas por defecto (p. ej. bucket-policy.json) a menos que quieras
+
+# --- Modelos y artefactos pesados ---
+# Evitar subir grandes pesos de modelos (.h5, .hdf5) u otros artefactos entrenados
+*.h5
+*.hdf5
+ml_models/*.h5
+ml_models/*.hdf5
+best_model.h5
+model_anemia.h5
+
+# --- Otros ---
+# Archivos temporales, cache y salidas de herramientas
+*.tmp
+*.bak
+*.swp
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+Pipfile.lock
+.python-version
+
+# Editor swap / backup
+*~
+
+# Si usas contenedores/local credentials
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# End of .gitignore

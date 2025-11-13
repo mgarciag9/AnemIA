@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Sistema de Detección de Anemia{% endblock %}</title>
+
+    <!-- Tipografía: Poppins para igualar diseño de referencia -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- CSS Base -->
+    <link rel="stylesheet" href="{% static 'css/typography.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/modals.css' %}" />
+
+    <!-- CSS Adicionales -->
+    {% block extra_css %}{% endblock %}
+  </head>
+  <body>
+    {% if user.is_authenticated %}
+    <!-- Incluir Sidebar -->
+    {% include 'components/sidebar.html' %}
+
+    <div class="main-wrapper">
+      <!-- Incluir Navbar -->
+      {% include 'components/navbar.html' %}
+
+      <!-- Mensajes de notificación -->
+      {% if messages %}
+      <div class="messages-container">
+        {% for message in messages %}
+        <div
+          class="alert alert-{{ message.tags }} alert-dismissible fade show"
+          role="alert"
+        >
+          {{ message }}
+          <button
+            type="button"
+            class="btn-close"
+            onclick="this.parentElement.remove()"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <!-- Contenido Principal -->
+      <main class="main-content">{% block content %}{% endblock %}</main>
+    </div>
+    {% else %}
+    <!-- Mensajes de notificación para páginas sin autenticación -->
+    {% if messages %}
+    <div class="messages-container">
+      {% for message in messages %}
+      <div
+        class="alert alert-{{ message.tags }} alert-dismissible fade show"
+        role="alert"
+      >
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          onclick="this.parentElement.remove()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Contenido sin autenticación -->
+    {% block standalone_content %}{% endblock %} {% endif %}
+
+    <!-- JavaScript Base -->
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <!-- JavaScript Adicionales -->
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

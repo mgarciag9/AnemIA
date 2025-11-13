@@ -1,0 +1,280 @@
+/* ================================================
+   ESTILOS DE AUTENTICACIÓN - Login y Registro
+   La tipografía base está en typography.css
+   ================================================ */
+
+/* Reset y configuración base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Contenedor principal */
+.auth-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Panel izquierdo - Formulario */
+.auth-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background-color: #ffffff;
+}
+
+.auth-form {
+  width: 100%;
+  max-width: 550px;
+  padding: 20px;
+}
+
+.auth-form h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 40px;
+}
+
+/* Formulario */
+form {
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.form-group.half-width {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 16px 16px 16px 55px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 1rem;
+  color: #333333;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+/* Inputs sin icono (nombre y apellido) */
+.form-group.half-width input[type="text"] {
+  padding-left: 16px;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: #8ba3b0;
+  background-color: #f9fafb;
+}
+
+input::placeholder {
+  color: #8ba3b0;
+  font-size: 1rem;
+}
+
+/* Botón de submit */
+.btn-submit {
+  width: 100%;
+  padding: 16px;
+  background-color: #8ba3b0;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.btn-submit:hover {
+  background-color: #7a92a0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(138, 163, 176, 0.3);
+}
+
+.btn-submit:active {
+  transform: translateY(0);
+}
+
+/* Footer del formulario */
+.auth-footer {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.forgot-password {
+  display: block;
+  color: #8ba3b0;
+  text-decoration: none;
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+  transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+  color: #7a92a0;
+}
+
+.register-link {
+  color: #8ba3b0;
+  font-size: 0.95rem;
+}
+
+.register-link a {
+  color: #5a7a8a;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.register-link a:hover {
+  color: #8ba3b0;
+}
+
+/* Panel derecho - Imagen de fondo */
+.auth-right {
+  flex: 1;
+  background: linear-gradient(135deg, #8ba3b0 0%, #6b8999 100%);
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+}
+
+/* Mensajes de error */
+.error-message {
+  display: block;
+  color: #e53e3e;
+  font-size: 0.85rem;
+  margin-top: 6px;
+  padding-left: 4px;
+}
+
+/* Alertas */
+.alert {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+}
+
+.alert-error {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+.alert-warning {
+  background-color: #fff3cd;
+  border: 1px solid #ffeaa7;
+  color: #856404;
+}
+
+.alert-info {
+  background-color: #d1ecf1;
+  border: 1px solid #bee5eb;
+  color: #0c5460;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .auth-container {
+    flex-direction: column;
+  }
+
+  .auth-right {
+    min-height: 200px;
+    order: -1;
+  }
+
+  .auth-left {
+    min-height: calc(100vh - 200px);
+  }
+}
+
+@media (max-width: 768px) {
+  .auth-form {
+    max-width: 100%;
+  }
+
+  .auth-form h1 {
+    font-size: 2.25rem;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .form-group.half-width {
+    margin-bottom: 20px;
+  }
+
+  .auth-right {
+    min-height: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-form h1 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    padding: 14px 14px 14px 50px;
+    font-size: 0.95rem;
+  }
+
+  .form-group.half-width input[type="text"] {
+    padding-left: 14px;
+  }
+
+  .btn-submit {
+    padding: 14px;
+    font-size: 1rem;
+  }
+}

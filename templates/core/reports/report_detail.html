@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Resultados de el Análisis - Sistema de Detección de Anemia{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/results.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="results-container">
+  <!-- Título Principal -->
+  <div class="results-header">
+    <h1 class="results-title">Resultados de el Análisis</h1>
+  </div>
+
+  <!-- Sección Principal con Grid -->
+  <div class="results-main-grid">
+    <!-- Columna Izquierda: Información -->
+    <div class="results-left-column">
+      <!-- Título del Reporte -->
+      <div class="report-title-section">
+        <h2 class="report-subtitle">Reporte de Detección de Anemia - Análisis Conjuntival</h2>
+        <p class="report-date-line"><strong>Fecha del análisis:</strong> {{ reporte.fecha_analisis|date:"d \d\e F \d\e Y" }}</p>
+      </div>
+
+      <!-- Información del Paciente -->
+      <div class="info-section">
+        <div class="info-row">
+          <span class="info-label-inline">Paciente:</span>
+          <span class="info-value-inline">{{ reporte.paciente.nombre }} {{ reporte.paciente.apellido }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label-inline">Dni:</span>
+          <span class="info-value-inline">{{ reporte.paciente.dni }}</span>
+        </div>
+      </div>
+
+      <!-- Observaciones Clínicas -->
+      <div class="section-block">
+        <h3 class="section-block-title">Observaciones Clínicas</h3>
+        <p class="section-text">{{ reporte.observaciones_clinicas }}</p>
+      </div>
+
+      <!-- Interpretación Preliminar -->
+      <div class="section-block">
+        <h3 class="section-block-title">Interpretación Preliminar</h3>
+        <div class="interpretation-content">
+          <p class="interpretation-label"><strong>Grado de palidez conjuntival:</strong> {{ reporte.grado_palidez|title }}</p>
+          <p class="interpretation-label">Sospecha diagnóstica: {{ reporte.sospecha_diagnostica }}</p>
+          <p class="section-text">{{ reporte.interpretacion_preliminar }}</p>
+        </div>
+      </div>
+
+      <!-- Recomendaciones -->
+      <div class="section-block">
+        <h3 class="section-block-title">Recomendaciones</h3>
+        <p class="section-text">{{ reporte.recomendaciones }}</p>
+      </div>
+
+      <!-- Botones de Acción -->
+      <div class="pdf-button-container">
+        <a 
+          href="{% url 'core:generate_report_pdf' reporte.id %}" 
+          class="btn-generate-pdf"
+          download
+        >
+          Generar PDF
+        </a>
+        <button 
+          type="button" 
+          class="btn-send-email"
+          onclick="sendEmail({{ reporte.id }}, '{{ reporte.paciente.correo }}')"
+        >
+          Enviar por Email
+        </button>
+      </div>
+    </div>
+
+    <!-- Columna Derecha: Imagen -->
+    <div class="results-right-column">
+      <div class="image-card">
+        <div class="image-header">
+          <span class="image-title">imagen detectado 1</span>
+        </div>
+        <div class="image-container">
+          {% if reporte.get_imagen_url %}
+            <img src="{{ reporte.get_imagen_url }}" alt="Imagen conjuntiva" class="conjuntiva-image" onerror="this.parentElement.innerHTML='<div class=\'no-image\'><svg width=\'80\' height=\'80\' viewBox=\'0 0 24 24\' fill=\'none\'><path d=\'M21 19V5C21 3.9 20.1 3 19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19ZM8.5 13.5L11 16.51L14.5 12L19 18H5L8.5 13.5Z\' fill=\'#8BA3B0\'/></svg><p>Error al cargar la imagen</p></div>'">
+          {% else %}
+            <div class="no-image">
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 19V5C21 3.9 20.1 3 19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19ZM8.5 13.5L11 16.51L14.5 12L19 18H5L8.5 13.5Z" fill="#8BA3B0"/>
+              </svg>
+              <p>No hay imagen disponible</p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Función para obtener el CSRF token de las cookies
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+function sendEmail(reportId, email) {
+  if (confirm(`¿Enviar reporte con PDF adjunto por correo a ${email}?`)) {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = `/reportes/${reportId}/enviar-email/`;
+    
+    const csrfToken = getCookie('csrftoken');
+    const csrfInput = document.createElement('input');
+    csrfInput.type = 'hidden';
+    csrfInput.name = 'csrfmiddlewaretoken';
+    csrfInput.value = csrfToken;
+    
+    form.appendChild(csrfInput);
+    document.body.appendChild(form);
+    form.submit();
+  }
+}
+</script>
+{% endblock %}

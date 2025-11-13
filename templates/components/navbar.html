@@ -1,0 +1,33 @@
+{% load static %}
+
+<!-- Barra de navegación superior -->
+<nav class="navbar">
+  <div class="navbar-left">
+    <h1 class="navbar-title">Sistema de Detección de Anemia</h1>
+  </div>
+
+  <div class="navbar-right">
+    <div class="user-info-container">
+      <div class="user-info">
+        <span class="user-name">
+          <span class="user-label">Doctor:</span>
+          {{ user.get_display_name }}
+        </span>
+        {% if user.profile_photo %}
+        <img
+          src="{{ user.profile_photo.url }}"
+          alt="Foto de perfil"
+          class="user-avatar"
+        />
+        {% else %}
+        <div class="user-avatar-default">
+          {{ user.first_name.0|upper }}{{ user.last_name.0|upper }}
+        </div>
+        {% endif %}
+      </div>
+      <a href="{% url 'security:logout' %}" class="logout-link"
+        >Cerrar sesión</a
+      >
+    </div>
+  </div>
+</nav>

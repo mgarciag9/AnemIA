@@ -1,0 +1,708 @@
+/* ============================================
+   PANTALLA DE RESULTADOS DE ANÁLISIS
+   ============================================ */
+
+.results-container {
+  padding: 2rem 3rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.results-header {
+  margin-bottom: 2rem;
+}
+
+.results-title {
+  color: #7fa8b5;
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ============================================
+   GRID PRINCIPAL - DOS COLUMNAS
+   ============================================ */
+
+.results-main-grid {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+/* ============================================
+   COLUMNA IZQUIERDA - INFORMACIÓN
+   ============================================ */
+
+.results-left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Título del Reporte */
+.report-title-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.report-subtitle {
+  color: #2c5f7a;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.report-date-line {
+  color: #2c5f7a;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.report-date-line strong {
+  font-weight: 600;
+}
+
+/* Información del Paciente */
+.info-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.info-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+
+.info-label-inline {
+  color: #2c5f7a;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.info-value-inline {
+  color: #333;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+/* Bloques de Sección */
+.section-block {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.section-block-title {
+  color: #2c5f7a;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+}
+
+.section-text {
+  color: #333;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  margin: 0;
+  text-align: justify;
+  white-space: pre-wrap;
+}
+
+/* Interpretación Preliminar */
+.interpretation-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.interpretation-label {
+  color: #2c5f7a;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.interpretation-label strong {
+  font-weight: 600;
+}
+
+/* Botón PDF */
+.pdf-button-container {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  text-align: left;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-generate-pdf {
+  background: #7fa8b5;
+  color: white;
+  padding: 0.875rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.btn-generate-pdf:hover {
+  background: #6b9eb2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(127, 168, 181, 0.3);
+}
+
+.btn-send-email {
+  background: #4caf50;
+  color: white;
+  padding: 0.875rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-send-email:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+/* ============================================
+   COLUMNA DERECHA - IMAGEN
+   ============================================ */
+
+.results-right-column {
+  position: sticky;
+  top: 2rem;
+}
+
+.image-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.image-header {
+  background: #7fa8b5;
+  padding: 1rem 1.5rem;
+  text-align: center;
+}
+
+.image-title {
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.image-container {
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  background-color: #f8f9fa;
+}
+
+.conjuntiva-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: contain;
+  max-height: 500px;
+  display: block;
+}
+
+.no-image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: #8ba3b0;
+  text-align: center;
+  padding: 2rem;
+}
+
+.no-image svg {
+  opacity: 0.5;
+}
+
+.no-image p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #8ba3b0;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1200px) {
+  .results-main-grid {
+    grid-template-columns: 1fr 350px;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .results-main-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .results-right-column {
+    position: relative;
+    top: 0;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .results-container {
+    padding: 1.5rem;
+  }
+
+  .results-title {
+    font-size: 2rem;
+  }
+
+  .report-subtitle {
+    font-size: 1rem;
+  }
+
+  .section-block {
+    padding: 1.25rem;
+  }
+
+  .pdf-button-container {
+    padding: 1.25rem;
+  }
+
+  .btn-generate-pdf {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .results-container {
+    padding: 1rem;
+  }
+
+  .results-title {
+    font-size: 1.75rem;
+  }
+
+  .report-title-section,
+  .info-section,
+  .section-block,
+  .pdf-button-container {
+    padding: 1rem;
+  }
+}
+
+/* ============================================
+   ENCABEZADO DEL REPORTE
+   ============================================ */
+
+.report-header {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+}
+
+.report-title {
+  color: #2d4a5c;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.85rem 0;
+  background: transparent;
+}
+
+.report-meta {
+  display: flex;
+  gap: 2rem;
+  color: #2d4a5c;
+  font-size: 0.88rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: none;
+  background: transparent;
+}
+
+.report-meta p {
+  margin: 0;
+}
+
+.report-meta strong {
+  font-weight: 600;
+}
+
+/* ============================================
+   GRID DE RESULTADOS
+   ============================================ */
+
+.results-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* ============================================
+   COLUMNA DE DIAGNÓSTICO
+   ============================================ */
+
+.diagnosis-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.diagnosis-content {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.diagnosis-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+  color: #3d5a6c;
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 1.25rem 0 0.65rem 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.section-title:first-child {
+  margin-top: 0;
+}
+
+.section-content {
+  color: #3d4a5c;
+  font-size: 0.93rem;
+  line-height: 1.65;
+  margin: 0 0 0.75rem 0;
+  text-align: justify;
+}
+
+/* ============================================
+   RESULTADO DE LA DETECCIÓN
+   ============================================ */
+
+.detection-result {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid;
+}
+
+.detection-result.has-anemia {
+  border-left-color: #ef4444;
+  background: linear-gradient(to right, #fef2f2 0%, white 100%);
+}
+
+.detection-result.no-anemia {
+  border-left-color: #22c55e;
+  background: linear-gradient(to right, #f0fdf4 0%, white 100%);
+}
+
+.result-title {
+  color: #2d4a5c;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+}
+
+.result-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.has-anemia .result-badge {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.no-anemia .result-badge {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.result-badge svg {
+  flex-shrink: 0;
+}
+
+.result-text {
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+/* Badge de Confianza */
+.confidence-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #e8f4f8;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.confidence-label {
+  color: #4a6b7c;
+  font-size: 0.9rem;
+}
+
+.confidence-value {
+  color: #2d4a5c;
+  font-size: 1.1rem;
+}
+
+/* ============================================
+   COLUMNA DE IMAGEN
+   ============================================ */
+
+.image-column {
+  position: sticky;
+  top: 2rem;
+}
+
+.image-container {
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.image-label {
+  background: #7fa8b5;
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 8px 8px 0 0;
+  margin: -1rem -1rem 1rem -1rem;
+  font-weight: 500;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.analysis-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+  object-fit: cover;
+}
+
+/* ============================================
+   BOTONES DE ACCIÓN
+   ============================================ */
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn {
+  flex: 1;
+  padding: 0.875rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-primary {
+  background: #7fa8b5;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #6a8fa0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(127, 168, 181, 0.3);
+}
+
+.btn-secondary {
+  background: #e53e3e;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #c53030;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
+}
+
+.btn-danger {
+  background: #e53e3e;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #c53030;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
+}
+
+.btn svg {
+  stroke-width: 2;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1024px) {
+  .results-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .image-column {
+    position: relative;
+    top: 0;
+  }
+
+  .image-container {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .results-container {
+    padding: 1rem;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .report-title {
+    font-size: 1.1rem;
+  }
+
+  .report-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .diagnosis-content {
+    padding: 1.25rem;
+  }
+}
+
+/* ============================================
+   ANIMACIONES
+   ============================================ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.diagnosis-content,
+.image-container,
+.action-buttons {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.diagnosis-content {
+  animation-delay: 0.1s;
+}
+
+.image-container {
+  animation-delay: 0.2s;
+}
+
+.action-buttons {
+  animation-delay: 0.3s;
+}
+
+/* ============================================
+   IMPRESIÓN
+   ============================================ */
+
+@media print {
+  .results-container {
+    padding: 0;
+  }
+
+  .action-buttons,
+  .page-title {
+    display: none;
+  }
+
+  .results-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .diagnosis-content,
+  .image-container {
+    box-shadow: none;
+    border: 1px solid #e0e0e0;
+    page-break-inside: avoid;
+  }
+}

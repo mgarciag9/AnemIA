@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/patients.css' %}" />
+{% endblock %}
+
+{% block content %}
+  <div class="patients-container">
+    <div class="patients-header">
+      <h1 class="patients-title">Gestión de pacientes</h1>
+
+      <div class="patients-actions">
+        <div class="search-box">
+          <form
+            method="get"
+            action="{% url 'core:patient_list' %}"
+            class="search-form"
+          >
+            <input
+              type="text"
+              name="q"
+              value="{{ query }}"
+              class="search-input"
+              placeholder="Buscar por Nombre, Correo o ID de paciente..."
+            />
+            <button type="submit" class="btn-search">Buscar</button>
+          </form>
+        </div>
+
+        <button class="btn-nuevo-paciente" onclick="openModalCreate()">
+          <span class="icon-plus">+</span> Nuevo Paciente
+        </button>
+      </div>
+    </div>
+
+    <div class="patients-table-container">
+      <table class="patients-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre Completo</th>
+            <th>Correo Electrónico</th>
+            <th>Dirección</th>
+            <th>Sexo</th>
+            <th>Reportes</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for paciente in pacientes %}
+            <tr>
+              <td>{{ paciente.id }}</td>
+              <td>{{ paciente.nombre_completo }}</td>
+              <td>{{ paciente.correo }}</td>
+              <td>{{ paciente.direccion|default:"" }}</td>
+              <td>{{ paciente.get_sexo_display }}</td>
+              <td>{{ paciente.num_reportes }}</td>
+              <td class="actions-cell">
+                <button
+                  class="btn-action btn-ver"
+                  onclick="openModalView('{{ paciente.id }}')"
+                  title="Ver detalles"
+                >
+                  ver
+                </button>
+                <button
+                  class="btn-action btn-editar"
+                  onclick="openModalEdit('{{ paciente.id }}')"
+                  title="Editar"
+                >
+                  editar
+                </button>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="7" class="empty-message">
+                {% if query %}
+                  No se encontraron pacientes con "{{ query }}"
+                {% else %}
+                  No hay pacientes registrados aún
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% if is_paginated %}
+      <div class="pagination">
+        <span class="pagination-info">
+          Mostrando {{ page_obj.start_index }} - {{ page_obj.end_index }} de
+          {{ page_obj.paginator.count }} pacientes
+        </span>
+
+        <div class="pagination-controls">
+          {% if page_obj.has_previous %}
+            <a
+              href="?page=1{% if query %}&q={{ query }}{% endif %}"
+              class="page-link page-first"
+              title="Primera página"
+            >
+              &laquo;&laquo;
+            </a>
+            <a
+              href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}"
+              class="page-link"
+              title="Página anterior"
+            >
+              &laquo;
+            </a>
+          {% else %}
+            <span class="page-link page-disabled">&laquo;&laquo;</span>
+            <span class="page-link page-disabled">&laquo;</span>
+          {% endif %}
+
+          {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+              <span class="page-link page-current">{{ num }}</span>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+              <a
+                href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}"
+                class="page-link"
+              >
+                {{ num }}
+              </a>
+            {% endif %}
+          {% endfor %}
+
+          {% if page_obj.has_next %}
+            <a
+              href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}"
+              class="page-link"
+              title="Página siguiente"
+            >
+              &raquo;
+            </a>
+            <a
+              href="?page={{ page_obj.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}"
+              class="page-link page-last"
+              title="Última página"
+            >
+              &raquo;&raquo;
+            </a>
+          {% else %}
+            <span class="page-link page-disabled">&raquo;</span>
+            <span class="page-link page-disabled">&raquo;&raquo;</span>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  {% include 'components/patient_modal.html' %}
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/patients.js' %}"></script>
+{% endblock %}

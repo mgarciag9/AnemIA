@@ -1,0 +1,30 @@
+<!-- Modal de transición a resultados -->
+<div id="transitionModal" class="modal-overlay">
+  <div class="modal-dialog transition-modal">
+    <div class="modal-content-transition">
+      <!-- Header del modal -->
+      <div class="transition-modal-header">
+        <h3 class="transition-title">Generando Diagnóstico</h3>
+      </div>
+
+      <!-- Body del modal -->
+      <div class="transition-modal-body">
+        <div class="loader-animation">
+          <div class="dna-loader">
+            <div class="dna-strand"></div>
+            <div class="dna-strand"></div>
+          </div>
+        </div>
+        <p class="transition-text">
+          Analizando imagen y generando reporte con IA...
+        </p>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p class="transition-status" id="transitionStatus">
+          Procesando análisis...
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

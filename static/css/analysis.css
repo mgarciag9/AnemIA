@@ -1,0 +1,916 @@
+/* ============================================
+   ESTILOS PARA ANÁLISIS DE IMÁGENES
+   La tipografía base está en typography.css
+   ============================================ */
+
+/* Asegurar que el scroll sea visible */
+body {
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+/* Estilo de la barra de scroll */
+body::-webkit-scrollbar {
+  width: 12px;
+}
+
+body::-webkit-scrollbar-track {
+  background: #f0f2f5;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-radius: 6px;
+  border: 2px solid #f0f2f5;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}
+
+.analysis-header {
+  margin-bottom: 2rem;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #6b9eb2;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+/* ============================================
+   SECCIÓN DE SELECCIÓN DE PACIENTE
+   ============================================ */
+
+.patient-section {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.9rem;
+  color: #2c5f7a;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.form-select {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  font-size: 0.95rem;
+  color: #333333;
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  appearance: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: #6b9eb2;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(107, 158, 178, 0.1);
+}
+
+.select-arrow::after {
+  content: "";
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid #6b9eb2;
+  pointer-events: none;
+}
+
+.btn-new-patient {
+  padding: 0.75rem 1.5rem;
+  background: #6b9eb2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.btn-new-patient:hover {
+  background: #5a8da0;
+}
+
+.icon-plus::before {
+  content: "+";
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* ============================================
+   ÁREA DE CARGA DE IMAGEN
+   ============================================ */
+
+.upload-section {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.upload-area {
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.upload-placeholder {
+  border: 2px dashed #c0d5d6;
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  text-align: center;
+  background: #f8fafb;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-placeholder:hover {
+  border-color: #6b9eb2;
+  background: #f0f7f8;
+}
+
+.upload-placeholder.drag-over {
+  border-color: #6b9eb2;
+  background: #e6f3f4;
+  border-style: solid;
+}
+
+.upload-icon {
+  color: #6b9eb2;
+  margin-bottom: 1.5rem;
+  opacity: 0.7;
+}
+
+.upload-text {
+  font-size: 0.95rem;
+  color: #333333;
+  margin-bottom: 0.5rem;
+}
+
+.upload-link {
+  color: #6b9eb2;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.upload-link:hover {
+  color: #5a8da0;
+}
+
+.upload-hint {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.3rem;
+}
+
+.upload-formats {
+  font-size: 0.85rem;
+  color: #999;
+  margin-top: 1rem;
+}
+
+/* ============================================
+   CONTENEDOR DE SELECCIÓN LIBRE
+   ============================================ */
+
+.selection-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.selection-instructions {
+  background: #e6f3f4;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #6b9eb2;
+  width: 100%;
+  max-width: 900px;
+}
+
+.instruction-text {
+  margin: 0;
+  color: #2c5f7a;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.instruction-text strong {
+  color: #6b9eb2;
+  font-weight: 600;
+}
+
+.canvas-wrapper {
+  position: relative;
+  display: block;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  background: #f8f9fa;
+  margin: 0 auto 1.5rem auto;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+#drawingCanvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  cursor: crosshair;
+  margin: 0 auto;
+}
+
+#maskCanvas {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: crosshair;
+  pointer-events: auto;
+}
+
+.selection-tools {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin: 0 auto 1rem auto;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 900px;
+}
+
+.tool-group {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.tool-label {
+  font-size: 0.9rem;
+  color: #2c5f7a;
+  font-weight: 500;
+  margin: 0;
+}
+
+.brush-slider {
+  width: 150px;
+  height: 6px;
+  border-radius: 3px;
+  background: #ddd;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.brush-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #6b9eb2;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.brush-slider::-webkit-slider-thumb:hover {
+  background: #5a8da0;
+}
+
+.brush-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #6b9eb2;
+  cursor: pointer;
+  border: none;
+  transition: background 0.3s;
+}
+
+.brush-slider::-moz-range-thumb:hover {
+  background: #5a8da0;
+}
+
+.brush-value {
+  font-size: 0.9rem;
+  color: #333333;
+  font-weight: 500;
+  min-width: 45px;
+}
+
+.btn-tool {
+  padding: 0.6rem 1.2rem;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-tool:hover {
+  background: #5a6268;
+}
+
+.icon-clear::before {
+  content: "🧹";
+  font-size: 1rem;
+}
+
+.selection-controls {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding-top: 1rem;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 900px;
+}
+
+.selection-help-text {
+  text-align: center;
+  color: #2c5f7a;
+  font-size: 0.9rem;
+  margin: 1rem auto 0 auto;
+  padding: 0.75rem 1rem;
+  background: #e6f3f4;
+  border-radius: 8px;
+  max-width: 700px;
+}
+
+.selection-help-text strong {
+  color: #6b9eb2;
+  font-weight: 600;
+}
+
+/* ============================================
+   CONTENEDOR DE RECORTE (LEGACY - Mantener por compatibilidad)
+   ============================================ */
+
+.crop-container {
+  width: 100%;
+}
+
+.crop-wrapper {
+  max-height: 500px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #000;
+  margin-bottom: 1rem;
+}
+
+.crop-wrapper img {
+  max-width: 100%;
+  display: block;
+}
+
+.crop-controls {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 500;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #5a6268;
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #c82333;
+}
+
+.btn-primary {
+  background: #6b9eb2;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #5a8da0;
+}
+
+/* ============================================
+   VISTA PREVIA DE IMAGEN RECORTADA
+   ============================================ */
+
+.cropped-preview {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  background: #f8f9fa;
+  padding: 2rem;
+}
+
+.cropped-preview img {
+  max-width: 100%;
+  max-height: 400px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-change-image {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.6rem 1.2rem;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  color: #666;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-change-image:hover {
+  background: white;
+  border-color: #6b9eb2;
+  color: #6b9eb2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================
+   BOTÓN DE ANÁLISIS
+   ============================================ */
+
+.analysis-action {
+  text-align: center;
+  padding-top: 1rem;
+}
+
+.btn-analyze {
+  padding: 1rem 3rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background: #6b9eb2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  min-width: 250px;
+}
+
+.btn-analyze:hover:not(:disabled) {
+  background: #5a8da0;
+}
+
+.btn-analyze:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.btn-analyze .btn-loader {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ============================================
+   SPINNER DE CARGA
+   ============================================ */
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================
+   MODAL DE RESULTADOS
+   ============================================ */
+
+.result-info {
+  padding: 1rem;
+  background: #e6f3f4;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.result-message {
+  font-size: 0.95rem;
+  color: #2c5f7a;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.result-hint {
+  font-size: 0.9rem;
+  color: #6b9eb2;
+  margin: 0;
+}
+
+.result-summary {
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.result-summary h6 {
+  color: #333333;
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.result-summary p {
+  margin: 0.5rem 0;
+  color: #333333;
+  font-size: 0.95rem;
+}
+
+.result-summary strong {
+  color: #333333;
+  font-weight: 600;
+}
+
+/* ============================================
+   ICONOS SIMPLES
+   ============================================ */
+
+.icon-rotate-left::before {
+  content: "↺";
+}
+.icon-rotate-right::before {
+  content: "↻";
+}
+.icon-zoom-in::before {
+  content: "+";
+}
+.icon-zoom-out::before {
+  content: "−";
+}
+.icon-cancel::before {
+  content: "×";
+  font-size: 1.2rem;
+}
+.icon-check::before {
+  content: "✓";
+}
+.icon-change::before {
+  content: "⟳";
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .analysis-container {
+    padding: 1rem;
+  }
+
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .analysis-content {
+    padding: 1.5rem;
+  }
+
+  .patient-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-new-patient {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .crop-controls,
+  .selection-controls {
+    flex-direction: column;
+  }
+
+  .btn-sm {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn-analyze {
+    width: 100%;
+  }
+
+  .selection-tools {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .tool-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .brush-slider {
+    flex: 1;
+    max-width: 200px;
+  }
+
+  .canvas-wrapper {
+    width: 100%;
+  }
+
+  #drawingCanvas,
+  #maskCanvas {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* ============================================
+   MODAL DE TRANSICIÓN A RESULTADOS
+   ============================================ */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-dialog {
+  animation: slideDown 0.3s;
+}
+
+.transition-modal {
+  background-color: #e8f3f7;
+  margin: 2% auto;
+  padding: 0;
+  border-radius: 10px;
+  width: 85%;
+  max-width: 500px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.modal-content-transition {
+  padding: 0;
+  text-align: center;
+  background-color: #e8f3f7;
+  border-radius: 10px;
+}
+
+/* Header del modal de transición */
+.transition-modal-header {
+  background-color: #7fa8b5;
+  color: white;
+  padding: 1.2rem 2rem;
+  border-radius: 10px 10px 0 0;
+}
+
+.transition-title {
+  font-family: "Poppins", sans-serif;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: white;
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+/* Body del modal de transición */
+.transition-modal-body {
+  padding: 2rem;
+  background-color: #e8f3f7;
+}
+
+.loader-animation {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+/* Animación de ADN */
+.dna-loader {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.dna-strand {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 4px solid #d4e8ef;
+  border-top-color: #7fa8b5;
+  border-radius: 50%;
+  animation: rotate 1.5s linear infinite;
+}
+
+.dna-strand:nth-child(2) {
+  animation-delay: -0.75s;
+  border-top-color: #6b9eb2;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+.transition-text {
+  font-family: "Poppins", sans-serif;
+  font-size: 0.95rem;
+  margin: 0 0 1.5rem 0;
+  color: #4a6b7c;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Barra de progreso */
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #d4e8ef;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7fa8b5, #6b9eb2, #7fa8b5);
+  background-size: 200% 100%;
+  border-radius: 10px;
+  animation: progressAnimation 2s ease-in-out infinite;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+@keyframes progressAnimation {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.transition-status {
+  font-family: "Poppins", sans-serif;
+  font-size: 0.9rem;
+  color: #4a6b7c;
+  margin: 0;
+  font-weight: 500;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Footer del modal de transición */
+.transition-modal-footer {
+  padding: 1.5rem 2rem;
+  background-color: #e8f3f7;
+  border-radius: 0 0 10px 10px;
+  border-top: 1px solid rgba(127, 168, 181, 0.2);
+}
+
+/* Responsive para modal */
+@media (max-width: 768px) {
+  .transition-modal {
+    width: 90%;
+    max-width: none;
+  }
+
+  .transition-modal-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .transition-modal-body {
+    padding: 1.5rem;
+  }
+
+  .transition-title {
+    font-size: 1.1rem;
+  }
+
+  .transition-text {
+    font-size: 0.85rem;
+  }
+
+  .dna-loader {
+    width: 60px;
+    height: 60px;
+  }
+
+  .loader-animation {
+    height: 80px;
+  }
+}
