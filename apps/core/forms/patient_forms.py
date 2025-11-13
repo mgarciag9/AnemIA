@@ -1,5 +1,7 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from apps.core.models import Paciente
+from apps.core.validators import validate_ecuadorian_cedula
 
 
 class PacienteForm(forms.ModelForm):
@@ -48,3 +50,13 @@ class PacienteForm(forms.ModelForm):
         self.fields['ciudad'].required = False
         self.fields['direccion'].required = False
         self.fields['foto_perfil'].required = False
+
+    def clean_dni(self):
+        dni = self.cleaned_data.get('dni')
+        if not dni:
+            return dni
+        try:
+            validate_ecuadorian_cedula(dni)
+        except ValidationError as e:
+            raise forms.ValidationError(e.messages)
+        return dni
